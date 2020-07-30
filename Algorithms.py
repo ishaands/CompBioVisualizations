@@ -1,44 +1,63 @@
-#Alignment algorithms and string comparison variations
+# ~~Alignment algorithms and string comparison variations~~
 
-#NOTE: The global alignment algorithm below does NOT use a backtrack matrix (I just did the backtracking and alignment formation
-# in one function. We may want to switch this to a backtrack version if that makes it easier to present.
+#Global Alignment
+def globalAlignment(str0, str1, match, mismatch, gap):
+    backtrack = globalBacktrack(str0, str1, match, mismatch, gap)
+    return outputGlobalAlignment(str0, str1, backtrack)
 
-#Global alignment
-def globalAlignment(a, b, match, mismatch, gap):
-    mtx = globalScoreTable(a, b, match, mismatch, gap)
-    row = len(mtx)-1
-    col = len(mtx[0])-1
-    str1 = ""
-    str2 = ""
-    diag = 0.0
-    while row != 0 or col != 0:
-        if a[row-1] == b[col-1]:
-            diag = match
+def globalBacktrack(str0, str1, match, mismatch, gap):
+    if len(str0) == 0 or len(str1) == 0:
+        print("Zero length strings given to globalBacktrack")
+        return
+
+    numRows = len(str0) + 1
+    numCols = len(str1) + 1
+    backtrack = [[0]*numCols for _ in range(numRows)]
+    scoringMatrix = globalScoreTable(str0, str1, match, mismatch, gap)
+
+    for i in range(1, numCols):
+        backtrack[0][i] = "LEFT"
+    for i in range(1, numRows):
+        backtrack[i][0] = "UP"
+    for i in range(1, numRows):
+        for j in range(1, numCols):
+            if scoringMatrix[i][j] == scoringMatrix[i-1][j] - gap:
+                backtrack[i][j] = "UP"
+            elif scoringMatrix[i][j] == scoringMatrix[i][j-1] - gap:
+                backtrack[i][j] = "LEFT"
+            else:
+                backtrack[i][j] = "DIAG"
+    print(*backtrack, sep="\n")
+    return backtrack
+
+def outputGlobalAlignment(str0, str1, backtrack):
+    a0 = ""
+    a1 = ""
+    while len(str0) > 0 or len(str1) > 0:
+        row = len(str0)
+        col = len(str1)
+        if backtrack[row][col] == "UP":
+            a0 = str0[row-1] + a0
+            a1 = "-" + a1
+            str0 = str0[:len(str0)-1]
+        elif backtrack[row][col] == "LEFT":
+            a0 = "-" + a0
+            a1 = str1[col-1] + a1
+            str1 = str1[:len(str1)-1]
+        elif backtrack[row][col] == "DIAG":
+            a0 = str0[row-1] + a0
+            a1 = str1[col-1] + a1
+            str0 = str0[:len(str0) - 1]
+            str1 = str1[:len(str1) - 1]
         else:
-            diag = mismatch
-        if max([mtx[row-1][col]+gap, mtx[row][col-1]+gap, mtx[row-1][col-1]+diag]) == mtx[row-1][col]+gap:
-            str1 = a[row-1:row] + str1
-            str2 = "-" + str2
-            row -= 1
-        elif max([mtx[row-1][col]+gap, mtx[row][col-1]+gap, mtx[row-1][col-1]+diag]) == mtx[row][col-1]+gap:
-            str1 = "-" + str1
-            str2 = b[col-1:col] + str2
-            col -= 1
-        elif max([mtx[row-1][col]+gap, mtx[row][col-1]+gap, mtx[row-1][col-1]+diag]) == mtx[row-1][col-1]+diag:
-            str1 = a[row - 1:row] + str1
-            str2 = b[col - 1:col] + str2
-            row -= 1
-            col -= 1
-    return [str1, str2]
-
+            print("Invalid value in backtrack array")
+            return
+    return (a0, a1)
 
 def globalScoreTable(a, b, match, mismatch, gap):
     numRows = len(a)+1
     numCols = len(b)+1
     scoringMatrix = [[0]*numCols for _ in range(numRows)]
-    up = 0.0
-    left = 0.0
-    diag = 0.0
     scoringMatrix = sideC(scoringMatrix, gap)
     for row in range(1, numRows):
         for col in range(1, numCols):
@@ -52,27 +71,25 @@ def globalScoreTable(a, b, match, mismatch, gap):
 
 def sideC(scoringMatrix, gap):
     for i in range(1, len(scoringMatrix)):
-        scoringMatrix[i][0] = -i+gap
+        scoringMatrix[i][0] = -i*gap
     for i in range(1, len(scoringMatrix[0])):
-        scoringMatrix[0][i] = -i + gap
+        scoringMatrix[0][i] = -i*gap
     return scoringMatrix
 
-#print(*globalAlignment("ATCGATCGT","ATCGGCTAC", 1.0, 1.0, 0.5), sep="\n")
+print("ATCGATCGT","ATCGGCTAC", *globalAlignment("ATCGATCGT","ATCGGCTAC", 1, 1, 5), sep="\n")
+print("AG", "AT", *globalAlignment("AG","AT", 1, 1, .4), sep="\n")
 
-#LCS length
+#LCS Length
 def LCSLength(a, b):
     if len(a) == 0 or len(b) == 0:
         return 0
-    scoringMatrix = matches(a, b)
+    scoringMatrix = LCSScoreMatrix(a, b)
     return scoringMatrix[len(a)][len(b)]
 
-def matches(a, b):
+def LCSScoreMatrix(a, b):
     numRows = len(a)+1
     numCols = len(b)+1
     scoringMatrix = [[0]*numCols for _ in range(numRows)]
-    up = 0
-    left = 0
-    diag = 0
     for row in range (1, numRows):
         for col in range (1, numCols):
             up = scoringMatrix[row-1][col]
@@ -104,13 +121,14 @@ def outputLCS(str0, str1, backtrack):
             str1 = str1[:len(str1) - 1]
         else:
             print("Invalid value in backtrack array")
+            return
     return s
 
 def LCSBacktrack(str0, str1):
     numRows = len(str0)+1
     numCols = len(str1)+1
     backtrack = [[0]*numCols for _ in range(numRows)]
-    scoringMatrix = LCSScoringMatrix(str0, str1)
+    scoringMatrix = LCSScoreMatrix(str0, str1)
 
     for i in range(1, numCols):
         backtrack[0][i] = "LEFT"
@@ -126,7 +144,7 @@ def LCSBacktrack(str0, str1):
                 backtrack[i][j] = "DIAG"
     return backtrack
 
-#EditDistanceMatrix
+#Edit-Distance Matrix
 def editDistance(a, b):
     mtx = matches2(a, b)
     return mtx[len(a)][len(b)]
@@ -135,9 +153,6 @@ def matches2(a, b):
     numRows = len(a) + 1
     numCols = len(b) + 1
     scoringMatrix = [[0] * numCols for _ in range(numRows)]
-    up = 0
-    left = 0
-    diag = 0
     scoringMatrix = sideC2(scoringMatrix)
     for row in range(1, numRows):
         for col in range(1, numCols):
@@ -157,7 +172,7 @@ def sideC2(m):
     return m
 
 def editDistanceMatrix(n):
-    distanceMatrix = [[0] * numCols for _ in range(numRows)]
+    distanceMatrix = [[0]*len(n) for _ in range(len(n))]
     limit = 0
     for row in range(len(n)):
         for col in range(limit, len(n)):
@@ -169,16 +184,9 @@ def editDistanceMatrix(n):
         limit += 1
     return distanceMatrix
 
-#String algorithms
-def frequentWords(text, k):
-    freqPatterns = []
-    freqMap = frequencyMap(text, k)
-    m = maxMap(freqMap)
 
-    for
+#Untranslated Algorithms
 '''
-
-
 func FrequentWords(text string, k int) []string {
 	freqPatterns := make([]string, 0)
 
