@@ -119,10 +119,148 @@ def upgma(mtx, speciesNames):
 
     return tree
 
+#CLUSTALW algos
+
+def sumPairScores(align1, align2, idx1, idx2, match, mismatch, gap):
+    alignment1 = ['']*len(align1)
+    for i in range(len(align1)):
+        alignment1[i] = align1[i][idx1]
+
+    alignment2 = [''] * len(align2)
+    for i in range(len(align2)):
+        alignment2[i] = align1[i][idx2]
+
+    score = 0.0
+
+    for char in alignment1:
+        for char2 in alignment2:
+            if char == '-' and char2 == '-':
+                continue
+            elif char == char2:
+                score += match
+            elif char != '-' and char2 != '-':
+                score -= mismatch
+            else:
+                score -= gap
+
+    return score
+
+def generateScoreTable(align1, align2, match, mismatch, gap, supergap):
+    scoreTable = [[0 for i in range(len(align1[0]) + 1)] for j in range(len(align2[0]) + 1)]
+
+    for i in range(len(scoreTable)):
+        scoreTable[i][0] = i * (-supergap)
+    for i in range(len(scoreTable[0])):
+        scoreTable[0][i] = i * (-supergap)
+
+    for i in range(1, len(align1[0]) + 1):
+        for j in range(1, len(align2[0]) + 1):
+
+            up = scoreTable[i-1][j] - supergap
+            left = scoreTable[i][j-1] - supergap
+            diag = scoreTable[i-1][j-1] + sumPairScores(align1, align2, i-1, j-1, match, mismatch, gap)
+
+            scoreTable[i][j] = max(up, left, diag)
+
+    return scoreTable
+
+def progressiveBacktrack(scoreTable, align1, align2, match, mismatch, gap, supergap):
+    numRows = len(align1[0]) + 1
+    numCols = len(align2[0]) + 1
+
+    backtrack = [['' for i in range(numRows)] for j in range(numCols)]
+
+    for i in range(1, numCols):
+        backtrack[0][i] = "LEFT"
+    for i in range(1, numRows):
+        backtrack[i][0] = "UP"
+
+    for i in range(1, numRows):
+        for j in range(1, numCols):
+            if (scoreTable[i][j] == scoreTable[i-1][j] - supergap):
+                backtrack[i][j] = "UP"
+            elif scoreTable[i][j] == scoreTable[i][j-1] - supergap:
+                backtrack[i][j] = "LEFT"
+            else:
+                backtrack[i][j] = "DIAG"
+
+    return backtrack
+
+def backtracker(string, backtrack, orientation):
+    aligned = ""
+
+    row = len(backtrack) - 1
+    col = len(backtrack[0]) - 1
+
+    while(row != 0 or col != 0):
+        k = len(string)
+
+        if backtrack[row][col] == "UP":
+            if (orientation == "top"):
+                aligned = "-" + aligned
+            elif orientation == "side":
+                aligned = str(string[k - 1]) + aligned
+                string = string[:k - 1]
+            row -= 1
+        elif backtrack[row][col] == "LEFT":
+            if (orientation == "side"):
+                aligned = "-" + aligned
+            elif orientation == "top":
+                aligned = str(string[k-1]) + aligned
+                string = string[:k-1]
+            col -= 1
+        else:
+            aligned = str(string[k-1]) + aligned
+            string = string[:k-1]
+            row -= 1
+            col -= 1
+
+    return aligned
+
+def outputProgressiveAlign(align1, align2, backtrack):
+    a = [[""] for i in range(len(align1) + len(align2))]
+
+    for i in range(len(align1)):
+        a[i] = backtracker(align1[i], backtrack, "side")
+    for j in range(len(align1), len(align2) + len(align1)):
+        a[j] = backtracker(align2[j - len(align1)], backtrack, "top")
+
+    return a
+
+def progressiveAlign(align1, align2, match, mismatch, gap, supergap):
+    scoreTable = generateScoreTable(align1, align2, match, mismatch, gap, supergap)
+    backtrack = progressiveBacktrack(scoreTable, align1, align2, match, mismatch, gap, supergap)
+    opt = outputProgressiveAlign(align1, align2, backtrack)
+
+    return opt
+
+def clustalw(guideTree, dnaStrings, match, mismatch, gap, supergap):
+
+    for i in range(len(dnaStrings)):
+        guideTree[i].alignment = [dnaStrings[i]]
+
+    for j in range(len(dnaStrings), len(guideTree)):
+        child1 = guideTree[j].child1
+        child2 = guideTree[j].child2
+
+        guideTree[j].alignment = progressiveAlign(child1.alignment, child2.alignment, match, mismatch, gap, supergap)
+
+    return guideTree[len(guideTree) - 1].alignment
+
+#main
 if __name__ == "__main__":
     print("UPGMA Test")
     mtx = [[0, 3, 4, 3], [3, 0, 4, 5], [4, 4, 0, 2], [3, 5, 2, 0]]
     labels = ["H", "C", "W", "S"]
     tree = upgma(mtx, labels)
 
-#CLUSTALW algos
+    print("CLUSTALW Test")
+
+    match = 1.0
+    mismatch = 1.0
+    gap = 6.0
+    supergap = 10.0
+
+    dnaStrings = ["ATGCATGC", "ATCCATGC", "TACGATGC", "TAAGATGC"]
+    alignment = clustalw(tree, dnaStrings, match, mismatch, gap, supergap)
+    print(alignment)
