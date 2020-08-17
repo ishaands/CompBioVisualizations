@@ -1,6 +1,7 @@
 # Evolutionary Trees contains algorithms and methods used in determining phylogenetic inheritance of various species.
 # Main algos UPGMA and CLUSTALW
 from dataclasses import dataclass
+import FormattingET
 
 @dataclass
 class Node:
@@ -256,12 +257,27 @@ if __name__ == "__main__":
     tree = upgma(mtx, labels)
 
     print("CLUSTALW Test")
+    
+    cats = ["USA", "CHN", "ITA"]
+
+    mtxreturn = FormattingET.readMatrixFromFile("Datasets/Input/SARS-Cov-2/distance.mtx")
+    mtx1 = mtxreturn[0]
+    labels1 = mtxreturn[1]
+
+    t = upgma(mtx1, labels1)
 
     match = 1.0
     mismatch = 1.0
     gap = 1.0
     supergap = 2.0
+    
+    dnaMap = FormattingET.readDNAStringsFromFile("Datasets/Input/SARS-Cov-2/RAW/covid-19-2.fasta")
+    keyvalues = FormattingET.getKeyValues(dnaMap)
+    newLabels = keyvalues[0]
+    newDnaStrings = keyvalues[1]
 
-    dnaStrings = ["AAAAATTTTT", "TTTTTCCCCC", "CCCCCGGGGG", "GGGGGTTTTT"]
-    alignment = clustalw(tree, dnaStrings, match, mismatch, gap, supergap)
-    print(alignment)
+    dnaStrings = FormattingET.rearrangeStrings(labels1, newLabels, newDnaStrings)
+    align = clustalw(t, dnaStrings, match, mismatch, gap, supergap)
+    FormattingET.writeAlignmentToFile(align, labels, "Datasets/Output/SARS-Cov-2", "covid.aln")
+    print(align)
+    
