@@ -8,8 +8,7 @@ def DNAToRNA(genome):
         elif char == "A" or char == 'G' or char == 'C':
             rna += char
         else:
-            print("character not recognized")
-            return
+            raise ValueError("Characters in genome should only be A, T, G, or C. The value of the character was " + char)
     return rna
 
 
