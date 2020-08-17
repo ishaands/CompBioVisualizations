@@ -128,7 +128,7 @@ def sumPairScores(align1, align2, idx1, idx2, match, mismatch, gap):
 
     alignment2 = [''] * len(align2)
     for i in range(len(align2)):
-        alignment2[i] = align1[i][idx2]
+        alignment2[i] = align2[i][idx2]
 
     score = 0.0
 
@@ -247,6 +247,7 @@ def clustalw(guideTree, dnaStrings, match, mismatch, gap, supergap):
 
     return guideTree[len(guideTree) - 1].alignment
 
+
 #main
 if __name__ == "__main__":
     print("UPGMA Test")
@@ -258,9 +259,9 @@ if __name__ == "__main__":
 
     match = 1.0
     mismatch = 1.0
-    gap = 6.0
-    supergap = 10.0
+    gap = 1.0
+    supergap = 2.0
 
-    dnaStrings = ["ATGCATGC", "ATCCATGC", "TACGATGC", "TAAGATGC"]
+    dnaStrings = ["AAAAATTTTT", "TTTTTCCCCC", "CCCCCGGGGG", "GGGGGTTTTT"]
     alignment = clustalw(tree, dnaStrings, match, mismatch, gap, supergap)
     print(alignment)
