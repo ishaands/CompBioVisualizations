@@ -147,7 +147,7 @@ def sumPairScores(align1, align2, idx1, idx2, match, mismatch, gap):
     return score
 
 def generateScoreTable(align1, align2, match, mismatch, gap, supergap):
-    scoreTable = [[0 for i in range(len(align1[0]) + 1)] for j in range(len(align2[0]) + 1)]
+    scoreTable = [[0 for j in range(len(align2[0]) + 1)] for i in range(len(align1[0]) + 1)]
 
     for i in range(len(scoreTable)):
         scoreTable[i][0] = i * (-supergap)
@@ -169,7 +169,7 @@ def progressiveBacktrack(scoreTable, align1, align2, match, mismatch, gap, super
     numRows = len(align1[0]) + 1
     numCols = len(align2[0]) + 1
 
-    backtrack = [['' for i in range(numRows)] for j in range(numCols)]
+    backtrack = [['' for i in range(numCols)] for j in range(numRows)]
 
     for i in range(1, numCols):
         backtrack[0][i] = "LEFT"
@@ -258,9 +258,9 @@ if __name__ == "__main__":
 
     print("CLUSTALW Test")
     
-    cats = ["USA", "CHN", "ITA"]
+    #cats = ["USA", "CHN", "ITA"]
 
-    mtxreturn = FormattingET.readMatrixFromFile("Datasets/Input/SARS-Cov-2/distance.mtx")
+    mtxreturn = FormattingET.readMatrixFromFile("Datasets/Input/Test-Example/distance.mtx")
     mtx1 = mtxreturn[0]
     labels1 = mtxreturn[1]
 
@@ -269,15 +269,15 @@ if __name__ == "__main__":
     match = 1.0
     mismatch = 1.0
     gap = 1.0
-    supergap = 2.0
+    supergap = 6.0
     
-    dnaMap = FormattingET.readDNAStringsFromFile("Datasets/Input/SARS-Cov-2/RAW/covid-19-2.fasta")
+    dnaMap = FormattingET.readDNAStringsFromFile("Datasets/Input/Test-Example/RAW/toy-example.fasta")
     keyvalues = FormattingET.getKeyValues(dnaMap)
     newLabels = keyvalues[0]
     newDnaStrings = keyvalues[1]
 
     dnaStrings = FormattingET.rearrangeStrings(labels1, newLabels, newDnaStrings)
     align = clustalw(t, dnaStrings, match, mismatch, gap, supergap)
-    FormattingET.writeAlignmentToFile(align, labels, "Datasets/Output/SARS-Cov-2", "covid.aln")
+    FormattingET.writeAlignmentToFile(align, labels1, "Datasets/Output/Test-Example", "toy.aln")
     print(align)
     

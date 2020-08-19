@@ -19,8 +19,8 @@ def getKeyValues(dnaMap):
     values = []
 
     for i in dnaMap:
-        values.append(dnaMap[i])
-        keys.append(i)
+        values.append(dnaMap[i].strip("\n"))
+        keys.append(i.strip("\n"))
     return keys, values
 
 def readDNAStringsFromFile(fileName):
@@ -57,7 +57,7 @@ def readMatrixFromFile(filename):
             nums = str.split(lines[i], "\t")
             for i in range(len(nums)):
                 if i == 0:
-                    speciesNames.append(nums[i])
+                    speciesNames.append(nums[i].strip("\n"))
                 else:
                     n = float(nums[i])
                     row.append(n)
