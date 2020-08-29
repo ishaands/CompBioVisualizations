@@ -69,6 +69,9 @@ function App() {
 		}
 	};
 
+
+	// firstDna, secondDna, "+-+--+"
+
 	return (
 		<div className="App">
 			<Grid container>
