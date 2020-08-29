@@ -1,22 +1,29 @@
 import React from "react";
 import "./App.css";
-import Anime from "react-anime";
 import Grid from "@material-ui/core/Grid";
+import ReactAnime from "react-animejs";
+
 function App() {
-	const firstDna = "ATTAG".split("");
-	const secondDna = "ATGAG".split("");
+	const { Anime, stagger } = ReactAnime;
+	console.log(stagger);
+	const firstDna = "ATTAGATTTAAAATTAAGGGCAGATA".split("");
+	const secondDna = "ATGAGTTATTAATTGCTATATCAGGA".split("");
 	const arrayFirst = firstDna.map((val, key) => {
 		return (
-			<span style={{ color: "grey" }} key={key}>
-				{val}
-			</span>
+			<Anime style={{ display: "inline" }}>
+				<span style={{ color: "grey" }} key={key}>
+					{val}
+				</span>
+			</Anime>
 		);
 	});
 	const arraySecond = secondDna.map((val, key) => {
 		return (
-			<span style={{ color: "grey" }} key={key}>
-				{val}
-			</span>
+			<Anime style={{ display: "inline" }}>
+				<span style={{ color: "grey" }} key={key}>
+					{val}
+				</span>
+			</Anime>
 		);
 	});
 	const [firstLetters, setFirstDna] = React.useState(arrayFirst);
@@ -29,23 +36,36 @@ function App() {
 		const determineMatch = (i) => {
 			let match = firstDna[i] === secondDna[i] ? correct : error;
 			const animatedFirst = (
-				<span style={match} key={`first${i}`}>
-					{firstDna[i]}
-				</span>
+				<Anime
+					initial={[{
+						targets: "#nucleotide",
+						// delay: stagger("100"),
+						translateX: 100,
+						easing: "linear"
+					}]}
+					style={{ display: "inline" }}
+				>
+					<span id="nucleotide" style={match} key={`first${i}`}>
+						{firstDna[i]}
+					</span>
+				</Anime>
 			);
 
 			const animatedSecond = (
-				<span style={match} key={`second${i}`}>
-					{secondDna[i]}
-				</span>
+				<Anime style={{ display: "inline" }}>
+					<span style={match} key={`second${i}`}>
+						{secondDna[i]}
+					</span>
+				</Anime>
 			);
 			finalLettersFirst.push(animatedFirst);
 			finalLettersSecond.push(animatedSecond);
-			setFirstDna(finalLettersFirst);
-			setSecondDna(finalLettersSecond);
 		};
 		for (let i = 0; i < firstLetters.length; i += 1) {
-			determineMatch(i);
+			setTimeout(determineMatch(i), 1);
+			setFirstDna(finalLettersFirst);
+			setSecondDna(finalLettersSecond);
+			console.log(finalLettersFirst);
 		}
 	};
 
@@ -53,7 +73,14 @@ function App() {
 		<div className="App">
 			<Grid container>
 				<Grid item xs={12}>
-					<div>{firstLetters}</div>
+					<div
+						style={{
+							whiteSpace: "nowrap",
+							overflowX: "auto",
+						}}
+					>
+						{firstLetters}
+					</div>
 				</Grid>
 				<Grid item xs={12}>
 					{secondLetters}
