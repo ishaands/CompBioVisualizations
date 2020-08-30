@@ -1,0 +1,15 @@
+.nucleotide {
+	font-size: 20px;
+	text-align: center;
+	display: inline;
+	font-family: "Roboto", sans-serif;
+}
+
+.pipe {
+	font-size: 25px;
+	display: inline;
+}
+
+.string {
+	font-family: "Nunito", sans-serif;
+}

@@ -1,76 +1,91 @@
 import React from "react";
-import "../App.css";
+import { motion, AnimatePresence } from "framer-motion";
 import Grid from "@material-ui/core/Grid";
-import ReactAnime from "react-animejs";
-
-function Hamming() {
-	const { Anime, stagger } = ReactAnime;
-	console.log(stagger);
+import Typography from "@material-ui/core/Typography";
+import "../styles/Hamming.css";
+export default function Hamming() {
 	const firstDna = "ATTAGATTTAAAATTAAGGGCAGATA".split("");
 	const secondDna = "ATGAGTTATTAATTGCTATATCAGGA".split("");
 	const arrayFirst = firstDna.map((val, key) => {
 		return (
-			<Anime style={{ display: "inline" }}>
-				<span style={{ color: "grey" }} key={key}>
+			<AnimatePresence>
+				<motion.span
+					style={{ display: "inline" }}
+					initial={{ opacity: 0, color: "#777777" }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 1, delay: 0.05 * key }}
+					exit={{ opacity: 0 }}
+					key={key}
+					className={"nucleotide"}
+				>
 					{val}
-				</span>
-			</Anime>
+				</motion.span>
+			</AnimatePresence>
 		);
 	});
 	const arraySecond = secondDna.map((val, key) => {
 		return (
-			<Anime style={{ display: "inline" }}>
-				<span style={{ color: "grey" }} key={key}>
-					{val}
-				</span>
-			</Anime>
+			<motion.span
+				style={{ display: "inline" }}
+				initial={{ opacity: 0, color: "#777777" }}
+				animate={{ opacity: 1 }}
+				transition={{ duration: 1, delay: 0.05 * key }}
+				key={key}
+				className={"nucleotide"}
+			>
+				{val}
+			</motion.span>
 		);
 	});
+	
 	const [firstLetters, setFirstDna] = React.useState(arrayFirst);
 	const [secondLetters, setSecondDna] = React.useState(arraySecond);
 	const simulateHamming = () => {
-		const correct = { color: "green" };
-		const error = { color: "red" };
+		const correct = "#38C95D";
+		const error = "#D62121";
 		const finalLettersFirst = [];
 		const finalLettersSecond = [];
+
 		const determineMatch = (i) => {
 			let match = firstDna[i] === secondDna[i] ? correct : error;
 			const animatedFirst = (
-				<Anime
-					initial={[{
-						targets: "#nucleotide",
-						// delay: stagger("100"),
-						translateX: 100,
-						easing: "linear"
-					}]}
-					style={{ display: "inline" }}
+				<motion.span
+					initial={{
+						opacity: 0,
+						color: "#777777",
+					}}
+					animate={{ opacity: 1, color: match }}
+					transition={{ duration: 1, delay: 0.1 * i }}
+					key={`first${i}`}
+					className={"nucleotide"}
 				>
-					<span id="nucleotide" style={match} key={`first${i}`}>
-						{firstDna[i]}
-					</span>
-				</Anime>
+					{firstDna[i]}
+				</motion.span>
 			);
 
 			const animatedSecond = (
-				<Anime style={{ display: "inline" }}>
-					<span style={match} key={`second${i}`}>
-						{secondDna[i]}
-					</span>
-				</Anime>
+				<motion.span
+					initial={{
+						opacity: 0,
+						color: "#777777",
+					}}
+					animate={{ opacity: 1, color: match }}
+					transition={{ duration: 1, delay: 0.1 * i }}
+					key={`second${i}`}
+					className={"nucleotide"}
+				>
+					{firstDna[i]}
+				</motion.span>
 			);
 			finalLettersFirst.push(animatedFirst);
 			finalLettersSecond.push(animatedSecond);
 		};
 		for (let i = 0; i < firstLetters.length; i += 1) {
-			setTimeout(determineMatch(i), 1);
+			determineMatch(i);
 			setFirstDna(finalLettersFirst);
 			setSecondDna(finalLettersSecond);
-			console.log(finalLettersFirst);
 		}
 	};
-
-
-	// firstDna, secondDna, "+-+--+"
 
 	return (
 		<div className="App">
@@ -82,10 +97,17 @@ function Hamming() {
 							overflowX: "auto",
 						}}
 					>
+						<Typography style={{ display: "inline" }} variant={"h6"}>
+							String A
+						</Typography>{" "}
 						{firstLetters}
 					</div>
 				</Grid>
+
 				<Grid item xs={12}>
+					<Typography style={{ display: "inline" }} className={"string"} variant={"h6"}>
+						String B
+					</Typography>{" "}
 					{secondLetters}
 				</Grid>
 			</Grid>
@@ -96,4 +118,3 @@ function Hamming() {
 	);
 }
 
-export default Hamming;
