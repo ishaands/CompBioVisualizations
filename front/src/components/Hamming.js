@@ -13,7 +13,7 @@ export default function Hamming() {
 					style={{ display: "inline" }}
 					initial={{ opacity: 0, color: "#777777" }}
 					animate={{ opacity: 1 }}
-					transition={{ duration: 1, delay: 0.05 * key }}
+					transition={{ duration: 1, delay: 0.1 * key }}
 					exit={{ opacity: 0 }}
 					key={key}
 					className={"nucleotide"}
@@ -25,25 +25,28 @@ export default function Hamming() {
 	});
 	const arraySecond = secondDna.map((val, key) => {
 		return (
-			<motion.span
-				style={{ display: "inline" }}
-				initial={{ opacity: 0, color: "#777777" }}
-				animate={{ opacity: 1 }}
-				transition={{ duration: 1, delay: 0.05 * key }}
-				key={key}
-				className={"nucleotide"}
-			>
-				{val}
-			</motion.span>
+			<AnimatePresence>
+				<motion.span
+					style={{ display: "inline" }}
+					initial={{ opacity: 0, color: "#777777" }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 1, delay: 0.1 * key }}
+					exit={{ opacity: 0 }}
+					key={key}
+					className={"nucleotide"}
+				>
+					{val}
+				</motion.span>
+			</AnimatePresence>
 		);
 	});
-	
+
 	const [firstLetters, setFirstDna] = React.useState(arrayFirst);
 	const [secondLetters, setSecondDna] = React.useState(arraySecond);
 	const simulateHamming = () => {
 		const correct = "#38C95D";
 		const error = "#D62121";
-		const finalLettersFirst = [];
+
 		const finalLettersSecond = [];
 
 		const determineMatch = (i) => {
@@ -51,11 +54,11 @@ export default function Hamming() {
 			const animatedFirst = (
 				<motion.span
 					initial={{
-						opacity: 0,
 						color: "#777777",
 					}}
-					animate={{ opacity: 1, color: match }}
-					transition={{ duration: 1, delay: 0.1 * i }}
+					id={"hi"}
+					animate={{ color: match }}
+					transition={{ duration: 0.1, delay: 0.1 * i }}
 					key={`first${i}`}
 					className={"nucleotide"}
 				>
@@ -77,13 +80,19 @@ export default function Hamming() {
 					{firstDna[i]}
 				</motion.span>
 			);
-			finalLettersFirst.push(animatedFirst);
-			finalLettersSecond.push(animatedSecond);
+
+			// finalLettersFirst.push(animatedFirst);
+			// finalLettersSecond.push(animatedSecond);
+			firstLetters.splice(i, 1, animatedFirst);
+			secondLetters.splice(i, 1, animatedSecond);
+			const finalLettersFirst = firstLetters;
+			setFirstDna(finalLettersFirst);
+			const finalLettersSecond = secondLetters;
+			setSecondDna(finalLettersSecond);
+			console.log(firstLetters);
 		};
 		for (let i = 0; i < firstLetters.length; i += 1) {
 			determineMatch(i);
-			setFirstDna(finalLettersFirst);
-			setSecondDna(finalLettersSecond);
 		}
 	};
 
@@ -105,7 +114,11 @@ export default function Hamming() {
 				</Grid>
 
 				<Grid item xs={12}>
-					<Typography style={{ display: "inline" }} className={"string"} variant={"h6"}>
+					<Typography
+						style={{ display: "inline" }}
+						className={"string"}
+						variant={"h6"}
+					>
 						String B
 					</Typography>{" "}
 					{secondLetters}
@@ -117,4 +130,3 @@ export default function Hamming() {
 		</div>
 	);
 }
-
