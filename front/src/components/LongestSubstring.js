@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import { motion, AnimatePresence } from "framer-motion";
 import Typography from "@material-ui/core/Typography";
 
-function Test() {
+function LongestSubstring() {
     //getting the longest shared substring from the beginning, using it with setting state kinda messed up
     const a = "ABCDEFGHIJK";
     const b = "AABDKJFDEFGHIASDF";
@@ -75,4 +75,4 @@ function AllSubstrings(str){
 
 
 
-export default Test
+export default LongestSubstring
