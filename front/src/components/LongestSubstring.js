@@ -24,8 +24,8 @@ function LongestSubstring() {
             Substings B: {bSub}
             </p>
             <button onClick = {() =>{
-                 showaSub(AllSubstrings(a).join(" "))
-                 showbSub(AllSubstrings(b).join(" "))
+                 showaSub(AllSubstrings(a).join("---"))
+                 showbSub(AllSubstrings(b).join("---"))
                  }}>show substrings</button>
                  
 			{/* {aSub.join(" ")} <br /> <br />
