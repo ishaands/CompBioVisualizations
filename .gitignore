@@ -76,3 +76,10 @@ celerybeat-schedule.*
 
 # Michael's Virtual Environment
 venv/
+
+#John's stuff
+front/src/components/SpeciesRichness.js
+front/src/components/speciesrichness.code-workspace
+front/src/styles/SpeciesRichness.css
+Datasets/
+.vscode/
