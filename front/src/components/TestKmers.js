@@ -51,7 +51,7 @@ const TestKmers = (props) => {
 						<motion.h3
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
-							transition={{ duration: 1, delay: 1 * key }}
+							transition={{ duration: 1, delay: 0.5 * key }}
 							style={{ display: "inline" }}
 							key={key}
 						>
@@ -66,7 +66,7 @@ const TestKmers = (props) => {
 						<motion.h3
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
-							transition={{ duration: 1, delay: 1 * key }}
+							transition={{ duration: 1, delay: 0.5 * key }}
 							style={{ display: "inline" }}
 							key={key}
 						>
