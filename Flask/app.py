@@ -1,5 +1,5 @@
 from flask import Flask, request
-
+from ..Algorithms import helper
 app = Flask(__name__)
 
 #test lol
@@ -24,6 +24,11 @@ def returnStrings():
     
     return {"match-sequence" : match}
 
-#@app.route('/sharedkmers', methods=['GET'])
-#def returnSharedKmers():
+@app.route('/jaccard', methods=['POST'])
+def returnJaccard():
+    arr1 = request.args.get("arr1")
+    arr2 = request.args.get("arr2")
+
+    
+
     
