@@ -1,6 +1,6 @@
 from flask import Flask, request
-from backend.examples import hamming
-from backend.other import helper
+from server.examples import hamming
+from server.other import helper
 
 app = Flask(__name__)
 
