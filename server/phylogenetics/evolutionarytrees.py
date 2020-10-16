@@ -1,7 +1,7 @@
 # Evolutionary Trees contains algorithms and methods used in determining phylogenetic inheritance of various species.
 # Main algos UPGMA and CLUSTALW
 from dataclasses import dataclass
-import FormattingET
+import formattinget
 
 @dataclass
 class Node:
@@ -260,7 +260,7 @@ if __name__ == "__main__":
     
     #cats = ["USA", "CHN", "ITA"]
 
-    mtxreturn = FormattingET.readMatrixFromFile("Datasets/Input/Test-Example/distance.mtx")
+    mtxreturn = formattinget.readMatrixFromFile("Datasets/Input/Test-Example/distance.mtx")
     mtx1 = mtxreturn[0]
     labels1 = mtxreturn[1]
 
@@ -271,13 +271,13 @@ if __name__ == "__main__":
     gap = 1.0
     supergap = 6.0
     
-    dnaMap = FormattingET.readDNAStringsFromFile("Datasets/Input/Test-Example/RAW/toy-example.fasta")
-    keyvalues = FormattingET.getKeyValues(dnaMap)
+    dnaMap = formattinget.readDNAStringsFromFile("Datasets/Input/Test-Example/RAW/toy-example.fasta")
+    keyvalues = formattinget.getKeyValues(dnaMap)
     newLabels = keyvalues[0]
     newDnaStrings = keyvalues[1]
 
-    dnaStrings = FormattingET.rearrangeStrings(labels1, newLabels, newDnaStrings)
+    dnaStrings = formattinget.rearrangeStrings(labels1, newLabels, newDnaStrings)
     align = clustalw(t, dnaStrings, match, mismatch, gap, supergap)
-    FormattingET.writeAlignmentToFile(align, labels1, "Datasets/Output/Test-Example", "toy.aln")
+    formattinget.writeAlignmentToFile(align, labels1, "Datasets/Output/Test-Example", "toy.aln")
     print(align)
     
