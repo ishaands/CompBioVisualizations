@@ -1,5 +1,6 @@
 from flask import Flask, request
-from ..Algorithms import helper
+import helper
+
 app = Flask(__name__)
 
 #test lol
@@ -29,6 +30,6 @@ def returnJaccard():
     arr1 = request.args.get("arr1")
     arr2 = request.args.get("arr2")
 
-    
+
 
     
