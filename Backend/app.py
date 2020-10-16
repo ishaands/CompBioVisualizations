@@ -1,5 +1,6 @@
 from flask import Flask, request
-import helper
+from backend.examples import hamming
+from backend.other import helper
 
 app = Flask(__name__)
 
@@ -12,23 +13,8 @@ def hello_world():
 def returnStrings():
     str1 = request.args.get("str1")
     str2 = request.args.get("str2")
-    if (len(str1) != len(str2)):
-        return {"exit-code": "1"}
-
-    match = ""
-    for i in range(len(str1)):
-        if (str1[i] != str2[i]):
-            match += "-"
-        else:
-            match += "+"
-            
+    return hamming.hamming(str1, str2)
     
-    return {"match-sequence" : match}
-
-@app.route('/jaccard', methods=['POST'])
-def returnJaccard():
-    arr1 = request.args.get("arr1")
-    arr2 = request.args.get("arr2")
 
 
 
