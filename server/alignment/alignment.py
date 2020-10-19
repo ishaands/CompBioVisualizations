@@ -184,6 +184,34 @@ def editDistanceMatrix(n):
         limit += 1
     return distanceMatrix
 
+#generate list of substrings
+def findSubstrings(string):
+	substrings = []
+	for i in range(1, len(string) + 1):
+		for j in range(0, len(string) - i + 1):
+			substrings.append(string[j:j+i])
+	
+	return substrings
+	
+#find all shared substrings between both lists
+def findSharedSubstrings(list1, list2):
+	sharedSubstrings = []
+	for str1 in list1:
+		for str2 in list2:
+			if str1 == str2:
+				sharedSubstrings.append(str1)
+	return sharedSubstrings
+
+#find the longest shared substring from a list of shared substrings
+def findLongestShared(list):
+	maxLength = 0
+	lcs = ""
+	for str in list:
+		if len(str) > maxLength:
+			lcs = str
+			maxLength = len(str)
+	
+	return lcs
 
 #Untranslated Algorithms
 '''
