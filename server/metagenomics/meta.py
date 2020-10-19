@@ -56,24 +56,37 @@ def frequencyMap(arr):
 
     return freqMap
 
-
+#modified jaccard distance calculator to return a json of relevant information
 def jaccardDistance(sample1, sample2):
     sumOfMins = 0
     sumOfMaxs = 0
 
+
+    returninfo = {}
+
     for key, val1 in sample1:
         if key in sample2.keys():
             val2 = sample2[key]
+            if (val1 < val2):
+                returninfo[key] = 1
+            else:
+                returninfo[key] = 2
             sumOfMins += MinTwo(val1, val2)
             sumOfMaxs += MaxTwo(val1, val2)
         else:
             sumOfMaxs += val1
+            returninfo[key] = 2
 
     for key, val2 in sample2:
-        if key in sample1.keys():
+        if key not in sample1.keys():
             sumOfMaxs += val2
+            returninfo[key] = 1
 
-    return 1 - float(sumOfMins) / float(sumOfMaxs)
+    returninfo["minsum"] = sumOfMins
+    returninfo["maxsum"] = sumOfMaxs
+
+    returninfo["jaccard"] = 1 - float(sumOfMins) / float(sumOfMaxs)
+    return returninfo
 
 
 def MinTwo(a, b):
@@ -92,17 +105,28 @@ def brayCurtisDistance(sample1, sample2):
     sumOfMins = 0
     total = 0
 
+    returninfo = {}
+    #iterate through first dict
     for key, val1 in sample1:
         if key in sample2.keys():
             val2 = sample2[key]
+            if (val1 < val2):
+                returninfo[key] = 1
+            else:
+                returninfo[key] = 2
             sumOfMins += MinTwo(val1, val2)
             total += val1 + val2
         else:
             total += val1
-
+            returninfo[key] = 2
+    #iterate through second dict
     for key, val2 in sample2:
-        if key in sample1.keys():
+        if key not in sample1.keys():
             total += val2
-
-    avg = float(total) / 2.0
-    return 1 - float(sumOfMins) / avg
+            returninfo[key] = 1
+    #calculate bray curtis
+    returninfo["summin"] = sumOfMins
+    returninfo["total"] = total
+    returninfo["avg"] = float(total) / 2.0
+    returninfo["bray-curtis"] = 1 - float(sumOfMins) / (float(total) / 2.0)
+    return returninfo

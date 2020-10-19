@@ -1,4 +1,4 @@
-
+#example algo hamming
 def hamming(str1, str2):
     if (len(str1) != len(str2)):
         return {"exit-code": "1"}
