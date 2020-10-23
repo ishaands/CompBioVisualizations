@@ -1,10 +1,10 @@
 import React from "react";
 import "./App.css";
 import Hamming from "./components/Hamming";
-import SpeciesRichness from "./components/SpeciesRichness";
+import BrayCurtisJaccard from "./components/BrayCurtisJaccard";
 function App() {
 	//return <Hamming />;
-	return <SpeciesRichness />;
+	return <Hamming />;
 }
 
 export default App;

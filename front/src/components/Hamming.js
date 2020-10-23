@@ -37,7 +37,7 @@ export default function Hamming() {
 			</motion.span>
 		);
 	});
-	
+
 	const [firstLetters, setFirstDna] = React.useState(arrayFirst);
 	const [secondLetters, setSecondDna] = React.useState(arraySecond);
 	const simulateHamming = () => {
@@ -55,7 +55,7 @@ export default function Hamming() {
 						color: "#777777",
 					}}
 					animate={{ opacity: 1, color: match }}
-					transition={{ duration: 1, delay: 0.1 * i }}
+					transition={{ duration: .1, delay: 0.2 * i }}
 					key={`first${i}`}
 					className={"nucleotide"}
 				>
@@ -70,7 +70,7 @@ export default function Hamming() {
 						color: "#777777",
 					}}
 					animate={{ opacity: 1, color: match }}
-					transition={{ duration: 1, delay: 0.1 * i }}
+					transition={{ duration: .1, delay: 0.2 * i }}
 					key={`second${i}`}
 					className={"nucleotide"}
 				>
@@ -117,4 +117,3 @@ export default function Hamming() {
 		</div>
 	);
 }
-
