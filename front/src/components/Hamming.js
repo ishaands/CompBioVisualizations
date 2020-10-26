@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import "../styles/Hamming.css";
+import {useTable} from "react-table";
 export default function Hamming() {
 	const firstDna = "ATTAGATTTAAAATTAAGGGCAGATA".split("");
 	const secondDna = "ATGAGTTATTAATTGCTATATCAGGA".split("");

@@ -12,7 +12,8 @@
     "react-anime": "^3.0.3",
     "react-animejs": "^0.5.4",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "react-table": "^7.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
