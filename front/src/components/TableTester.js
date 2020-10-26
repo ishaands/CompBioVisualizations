@@ -5,8 +5,51 @@ import Typography from "@material-ui/core/Typography";
 import "../styles/Hamming.css";
 import TableComponent from "./TableComponent.js";
 import {useTable} from "react-table";
+const axios = require('axios');
+
 
 export default function TableTester() {
+  const dictSite1 =
+  {
+    "Bears": 5,
+    "Turkeys": 7,
+    "Coyotes": 0,
+    "Deer": 2,
+    "Groundhogs": 8,
+    // {
+    //   "Species": 'Bears',
+    //   "Population": 5,
+    // },
+    // {
+    //   "Species": 'Turkeys',
+    //   "Population": 7,
+    // },
+    // {
+    //   "Species": 'Coyotes',
+    //   "Population": 0,
+    // },
+    // {
+    //   "Species": 'Deer',
+    //   "Population": 2,
+    // },
+    // {
+    //   "Species": 'Groundhogs',
+    //   "Population": 8,
+    // }
+  }
+  const dictSite2 =
+  {
+    "Bears": 0,
+    "Turkeys": 5,
+    "Coyotes": 8,
+    "Deer": 4,
+    "Groundhogs": 6,
+  }
+  const [brayCurtisCalculation, setBrayCurtisCalculation] = React.useState(0);
+  axios.post("/bray-curtis", {
+    dict1: dictSite1,
+    dict2: dictSite2,
+  }).then(res => setBrayCurtisCalculation(res.data['bray-curtis']))
   const site1 = [
     {
       "Species": 'Bears',
@@ -96,6 +139,7 @@ export default function TableTester() {
      <div>
        <TableComponent columns={columns1} data={data1}/>
        <TableComponent columns={columns2} data={data2}/>
+       <h1> brayCurtisCalculation: {brayCurtisCalculation} </h1>
      </div>
    )
 }

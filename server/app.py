@@ -35,7 +35,7 @@ def getJaccard():
 
     return returninfo
 
-#return json of bray curtis distnace for two metagenomic samples    
+#return json of bray curtis distnace for two metagenomic samples
 @app.route('/bray-curtis', methods=['POST'])
 def getBrayCurtis():
     #get input from json

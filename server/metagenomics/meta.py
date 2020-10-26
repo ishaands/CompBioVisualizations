@@ -107,7 +107,7 @@ def brayCurtisDistance(sample1, sample2):
 
     returninfo = {}
     #iterate through first dict
-    for key, val1 in sample1:
+    for key, val1 in sample1.items():
         if key in sample2.keys():
             val2 = sample2[key]
             if (val1 < val2):
@@ -120,7 +120,7 @@ def brayCurtisDistance(sample1, sample2):
             total += val1
             returninfo[key] = 2
     #iterate through second dict
-    for key, val2 in sample2:
+    for key, val2 in sample2.items():
         if key not in sample1.keys():
             total += val2
             returninfo[key] = 1
