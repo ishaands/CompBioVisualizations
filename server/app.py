@@ -6,6 +6,13 @@ from server.other import helper
 
 app = Flask(__name__)
 
+def checkNull(obj1):
+    if (obj1 is None):
+        print("term " + obj1 + " is null")
+        return True
+    
+    return False
+
 #welcome screen for server
 @app.route('/')
 def hello_world():
@@ -16,8 +23,11 @@ def hello_world():
 def returnStrings():
     #get input from json
     dict = request.get_json()
+    if checkNull(dict): return {"exit-code" : 1}
+    #check validity of parameters
     str1 = dict["str1"]
     str2 = dict["str2"]
+    if (checkNull(str1) or checkNull(str2)): return {"exit-code" : 1}
     #return match sequence of +/- in json format
     matchsequence = hamming.hamming(str1, str2)
 
@@ -28,8 +38,12 @@ def returnStrings():
 def getJaccard():
     #get input from json
     dict = request.get_json()
+    if checkNull(dict): return {"exit-code" : 1}
+    #check validity of parameters
+
     dict1 = dict["dict1"]
     dict2 = dict["dict2"]
+    if (checkNull(dict1) or checkNull(dict2)): return {"exit-code" : 1}
 
     returninfo = meta.jaccardDistance(dict1, dict2)
 
@@ -40,8 +54,12 @@ def getJaccard():
 def getBrayCurtis():
     #get input from json
     dict = request.get_json()
+    if checkNull(dict): return {"exit-code" : 1}
+    
+    #check validity of parameters
     dict1 = dict["dict1"]
     dict2 = dict["dict2"]
+    if (checkNull(dict1) or checkNull(dict2)): return {"exit-code" : 1}
 
     returninfo = meta.brayCurtisDistance(dict1, dict2)
 
@@ -52,8 +70,12 @@ def getBrayCurtis():
 def getSubstrings():
     #get input from json
     dict = request.get_json()
+    if checkNull(dict): return {"exit-code" : 1}
+    
+    #check validity of parameters
     str1 = dict["str1"]
     str2 = dict["str2"]
+    if (checkNull(str1) or checkNull(str2)): return {"exit-code" : 1}
 
     #find all substrings for each of the strings for longest shared substring
     substrings1 = alignment.findSubstrings(str1)
@@ -66,8 +88,12 @@ def getSubstrings():
 def getShared():
     #get input from json
     dict = request.get_json()
+    if checkNull(dict): return {"exit-code" : 1}
+    
+    #check validity of parameters
     list1 = dict["list1"]
     list2 = dict["list2"]
+    if (checkNull(list1) or checkNull(list2)): return {"exit-code" : 1}
 
     sharedSubstrings = alignment.findSharedSubstrings(list1, list2)
 
@@ -78,8 +104,26 @@ def getShared():
 def longestSharedSubstring():
     #get input from json
     dict = request.get_json()
+    if checkNull(dict): return {"exit-code" : 1}
+
+    #check validity of parameters
     list = dict["list"]
+    if (checkNull(list)): return {"exit-code" : 1}
 
     lcs = alignment.findLongestShared(list)
 
     return {"longest-shared-substring" : lcs}
+
+#dp algorithm visualization return 
+@app.route('/dptest', methods = ['POST'])
+def getEditDistance():
+    #get input from json
+    dict = request.get_json()
+    if checkNull(dict): return {"exit-code" : 1}
+    
+    #check validity of parameters
+    str1 = dict["str1"]
+    str2 = dict["str2"]
+    if (checkNull(str1) or checkNull(str2)): return {"exit-code" : 1}
+
+    
