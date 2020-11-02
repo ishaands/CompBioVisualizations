@@ -114,7 +114,7 @@ def longestSharedSubstring():
 
     return {"longest-shared-substring" : lcs}
 
-#dp algorithm visualization return 
+#dp algorithm visualization return for edit distance
 @app.route('/dptest', methods = ['POST'])
 def getEditDistance():
     #get input from json
@@ -125,5 +125,9 @@ def getEditDistance():
     str1 = dict["str1"]
     str2 = dict["str2"]
     if (checkNull(str1) or checkNull(str2)): return {"exit-code" : 1}
+
+    returnedInfo = alignment.editDistance(str1, str2)
+
+    return returnedInfo
 
     
