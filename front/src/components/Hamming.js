@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import "../styles/Hamming.css";
+import {useTable} from "react-table";
 export default function Hamming() {
 	const firstDna = "ATTAGATTTAAAATTAAGGGCAGATA".split("");
 	const secondDna = "ATGAGTTATTAATTGCTATATCAGGA".split("");
@@ -37,7 +38,7 @@ export default function Hamming() {
 			</motion.span>
 		);
 	});
-	
+
 	const [firstLetters, setFirstDna] = React.useState(arrayFirst);
 	const [secondLetters, setSecondDna] = React.useState(arraySecond);
 	const simulateHamming = () => {
@@ -55,7 +56,7 @@ export default function Hamming() {
 						color: "#777777",
 					}}
 					animate={{ opacity: 1, color: match }}
-					transition={{ duration: 1, delay: 0.1 * i }}
+					transition={{ duration: .1, delay: 0.2 * i }}
 					key={`first${i}`}
 					className={"nucleotide"}
 				>
@@ -70,7 +71,7 @@ export default function Hamming() {
 						color: "#777777",
 					}}
 					animate={{ opacity: 1, color: match }}
-					transition={{ duration: 1, delay: 0.1 * i }}
+					transition={{ duration: .1, delay: 0.2 * i }}
 					key={`second${i}`}
 					className={"nucleotide"}
 				>
@@ -117,4 +118,3 @@ export default function Hamming() {
 		</div>
 	);
 }
-
