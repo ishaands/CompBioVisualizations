@@ -83,3 +83,4 @@ front/src/components/speciesrichness.code-workspace
 front/src/styles/SpeciesRichness.css
 Datasets/
 .vscode/
+.idea/

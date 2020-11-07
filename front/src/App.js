@@ -1,11 +1,14 @@
 import React from "react";
 import "./App.css";
 import Hamming from "./components/Hamming";
-import BrayCurtisJaccard from "./components/BrayCurtisJaccard";
-import TableTester from "./components/TableTester";
+// import SharedKmers from "./components/SharedKmers";
+import TestKmers from "./components/TestKmers";
 function App() {
-	//return <BrayCurtisJaccard />;
-	return <TableTester />;
+	return (
+		// <Hamming />
+		// <SharedKmers />
+		<TestKmers />
+	);
 }
 
 export default App;
