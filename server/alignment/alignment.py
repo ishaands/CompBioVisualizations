@@ -189,18 +189,19 @@ def findSubstrings(string):
 	substrings = []
 	for i in range(1, len(string) + 1):
 		for j in range(0, len(string) - i + 1):
-			substrings.append(string[j:j+i])
+			if (string[j:j+i] not in substrings):
+				substrings.append(string[j:j+i])
 	
-	return set(substrings)
+	return substrings
 	
 #find all shared substrings between both lists
 def findSharedSubstrings(list1, list2):
 	sharedSubstrings = []
 	for str1 in list1:
 		for str2 in list2:
-			if str1 == str2:
+			if str1 == str2 and str1 not in sharedSubstrings:
 				sharedSubstrings.append(str1)
-	return set(sharedSubstrings)
+	return sharedSubstrings
 
 #find the longest shared substring from a list of shared substrings
 def findLongestShared(list):
