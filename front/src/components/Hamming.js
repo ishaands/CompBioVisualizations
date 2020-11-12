@@ -75,7 +75,7 @@ export default function Hamming() {
 					key={`second${i}`}
 					className={"nucleotide"}
 				>
-					{firstDna[i]}
+					{secondDna[i]}
 				</motion.span>
 			);
 			finalLettersFirst.push(animatedFirst);
