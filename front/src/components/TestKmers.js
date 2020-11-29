@@ -1,11 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
-
+const axios = require("axios");
 const TestKmers = (props) => {
 	// this is for the first stage of the algorithm, where substrings get loaded in from backend
 	const [substringsOne, setSubstringsOne] = React.useState([]);
 	const [substringsTwo, setSubstringsTwo] = React.useState([]);
-
+	const baseUrl = "/lss";
 	// state variable representing the current algorithm
 	const [index, setIndex] = React.useState(0);
 
@@ -19,9 +19,15 @@ const TestKmers = (props) => {
 	// function to be fired once user clicks on the startAlgo button
 	const startAlgo = () => {
 		// dummy substrings that mimic fetching from the backend
-		setSubstringsOne(["ATT", "TTA", "TAG"]);
-		setSubstringsTwo(["ATT", "TTG", "TGA"]);
-		incrementIndex();
+		// making official axios post request to flask backend
+		axios
+			.post(`/lss-findsubstrings`, { str1: dnaOne, str2: dnaTwo })
+			.then((res) => {
+				const data = res.data;
+				setSubstringsOne(data["str1"]);
+				setSubstringsTwo(data["str2"]);
+				incrementIndex();
+			});
 	};
 
 	// function to be fired once substrings have been displayed and user wants to match them
@@ -31,7 +37,16 @@ const TestKmers = (props) => {
 		incrementIndex();
 		setSubstringsOne([]);
 		setSubstringsTwo([]);
-		setMatchedSubstrings(["ATT"]);
+		axios
+			.post(`${baseUrl}-findshared`, {
+				list1: substringsOne,
+				list2: substringsTwo,
+			})
+			.then((res) => {
+				const data = res.data;
+				setMatchedSubstrings(data["shared-substrings"]);
+				incrementIndex();
+			});
 	};
 
 	// function to be fired once matching substrings have been displayed and user wants to get the longest one
@@ -39,7 +54,11 @@ const TestKmers = (props) => {
 		// get longest data from backend
 		incrementIndex();
 		setMatchedSubstrings([]);
-		setLongestSubstring("ATT");
+		axios.post(`${baseUrl}`, { list: matchedSubstrings }).then((res) => {
+			const data = res.data;
+			setLongestSubstring(data["longest-shared-substring"]);
+			incrementIndex();
+		});
 	};
 	// create a list of buttons that will initiate a given algorithm stage
 	const algoButtons = [

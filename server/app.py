@@ -6,13 +6,14 @@ from server.other import helper
 
 app = Flask(__name__)
 
-#welcome screen for server
-@app.route('/')
+# welcome screen for server
+@app.route("/")
 def hello_world():
     return "Welcome to the Server!"
 
-#return json for hamming distance of two strings
-@app.route('/hamming', methods=['POST'])
+
+# return json for hamming distance of two strings
+@app.route("/hamming", methods=["POST"])
 def returnStrings():
     #get input from json
     dict = request.get_json()
@@ -23,8 +24,9 @@ def returnStrings():
 
     return matchsequence
 
-#return json of jaccard distance between two metagenomic samples
-@app.route('/jaccard', methods=['POST'])
+
+# return json of jaccard distance between two metagenomic samples
+@app.route("/jaccard", methods=["POST"])
 def getJaccard():
     #get input from json
     dict = request.get_json()
@@ -35,8 +37,9 @@ def getJaccard():
 
     return returninfo
 
-#return json of bray curtis distnace for two metagenomic samples
-@app.route('/bray-curtis', methods=['POST'])
+
+# return json of bray curtis distnace for two metagenomic samples
+@app.route("/bray-curtis", methods=["POST"])
 def getBrayCurtis():
     #get input from json
     dict = request.get_json()
@@ -59,19 +62,19 @@ def getSubstrings():
     substrings1 = alignment.findSubstrings(str1)
     substrings2 = alignment.findSubstrings(str2)
 
-    return {"str1" : substrings1, "str2" : substrings2}
+    return {"str1": substrings1, "str2": substrings2}
 
 #find shared strings between two lists
-@app.route('/lss-findshared', methods = ['POST'])
-def getShared():
-    #get input from json
-    dict = request.get_json()
-    list1 = dict["list1"]
-    list2 = dict["list2"]
 
+@app.route("/lss-findshared", methods=["POST"])
+def getShared():
+    data = request.get_json()
+    list1 = data["list1"]
+    list2 = data["list2"]
+    print(list1)
     sharedSubstrings = alignment.findSharedSubstrings(list1, list2)
 
-    return {"shared-substrings" : sharedSubstrings}
+    return {"shared-substrings": sharedSubstrings}
 
 #find longest string in a list of strings
 @app.route('/lss', methods = ['POST'])
@@ -82,4 +85,4 @@ def longestSharedSubstring():
 
     lcs = alignment.findLongestShared(list)
 
-    return {"longest-shared-substring" : lcs}
+    return {"longest-shared-substring": lcs}
